@@ -21,7 +21,6 @@ TEST_REQUIREMENTS = [
     "coveralls==1.4.0",
     "flake8==3.5.0",
     "mock==2.0.0",
-    "nose==1.3.7",
 ]
 
 with open("README.md", "r") as f:

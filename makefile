@@ -27,18 +27,6 @@ build: # build package for distribuition
 publish: # publish package to the pypi
 	twine upload dist/*
 
-.PHONY: lint
-lint: # lint code
-	flake8 .
-
-.PHONY: test
-test: # run tests
-	nosetests tests
-
-.PHONY: cover
-cover: # coverage tests
-	nosetests -w tests --with-coverage --cover-package=$(PACKAGE)
-
 .PHONY: it
 it:
 	@echo "Any color you want, as long as it's Black"

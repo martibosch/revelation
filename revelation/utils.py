@@ -6,6 +6,8 @@ import shutil
 import tarfile
 import zipfile
 
+import pypandoc
+
 from . import default_config
 
 try:
@@ -104,3 +106,29 @@ def extract_file(compressed_file, path="."):
             "{0} is not a valid file".format(compressed_file))
 
     return os.path.abspath(os.path.join(path, basename))
+
+
+def pandoc_convert(slides_fp, output_fp=None,
+                   revealjs_url='https://revealjs.com', theme='black',
+                   transition='slide', slide_level=1):
+    """
+    See for more info:
+    https://github.com/jgm/pandoc/wiki/Using-pandoc-to-produce-reveal.js-slides
+    """
+
+    # print("Converting", slides_fp, "to html into", output_fp)
+    kwargs = {}
+    if output_fp:
+        kwargs['outputfile'] = output_fp
+
+    output = pypandoc.convert_file(
+        slides_fp, to='revealjs', extra_args=[
+            '-s', '--slide-level={}'.format(slide_level), '-V',
+            'revealjs-url={}'.format(revealjs_url), '-V',
+            'theme={}'.format(theme)
+        ], **kwargs)
+
+    if output:
+        # if the output file is specified, `convert_file` will return an empty
+        # string, otherwise it will return the html
+        return output

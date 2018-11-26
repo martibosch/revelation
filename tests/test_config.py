@@ -13,13 +13,11 @@ class ConfigTestCase(TestCase):
         _, config_file = tempfile.mkstemp(".py", dir=self.tests_folder)
 
         with open(config_file, "w") as file:
-            file.write(
-                "REVEAL_META = {\n"
-                '"title": "Test Title",\n'
-                '"author": "Test Author",\n'
-                '"description": "Test description",\n'
-                "}"
-            )
+            file.write("REVEAL_META = {\n"
+                       '"title": "Test Title",\n'
+                       '"author": "Test Author",\n'
+                       '"description": "Test description",\n'
+                       "}")
 
         self.config = Config(config_file)
 

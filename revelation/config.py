@@ -50,8 +50,7 @@ class Config(dict):
                 )
         except IOError as error:
             error.strerror = "Unable to load configuration file ({})".format(
-                error.strerror
-            )
+                error.strerror)
 
             raise
 

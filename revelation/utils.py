@@ -6,6 +6,8 @@ import shutil
 import tarfile
 import zipfile
 
+from . import default_config
+
 try:
     # python 3
     from urllib.request import urlretrieve
@@ -14,8 +16,6 @@ except ImportError:
     from urllib import urlretrieve
 
     FileNotFoundError = IOError
-
-from . import default_config
 
 REVEAL_URL = "https://github.com/hakimel/reveal.js/archive/3.6.0.tar.gz"
 
@@ -31,16 +31,12 @@ def make_presentation(presentation_path):
     os.mkdir(os.path.join(presentation_path, "media"))
     # Config file
     config_file = os.path.join(
-        os.path.dirname(default_config.__file__), "default_config.py"
-    )
+        os.path.dirname(default_config.__file__), "default_config.py")
     shutil.copy(config_file, os.path.join(presentation_path, "config.py"))
     # Slide file
     with open(os.path.join(presentation_path, "slides.md"), "w") as f:
-        f.write(
-            "# {0}\n\nStart from here!".format(
-                name.replace("_", " ").replace("-", " ").title()
-            )
-        )
+        f.write("# {0}\n\nStart from here!".format(
+            name.replace("_", " ").replace("-", " ").title()))
 
 
 def download_reveal(url=None):
@@ -105,7 +101,6 @@ def extract_file(compressed_file, path="."):
             raise NotImplementedError("File type not supported")
     else:
         raise FileNotFoundError(
-            "{0} is not a valid file".format(compressed_file)
-        )
+            "{0} is not a valid file".format(compressed_file))
 
     return os.path.abspath(os.path.join(path, basename))

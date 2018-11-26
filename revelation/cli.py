@@ -10,18 +10,12 @@ from geventwebsocket import Resource, WebSocketServer
 from werkzeug.debug import DebuggedApplication
 
 import revelation
-from revelation import Revelation, PresentationReloader
-from revelation.utils import (
-    download_reveal,
-    extract_file,
-    make_presentation,
-    move_and_replace,
-)
-
+from revelation import PresentationReloader, Revelation
+from revelation.utils import (download_reveal, extract_file, make_presentation,
+                              move_and_replace)
 
 REVEALJS_FOLDER = os.path.join(
-    os.path.join(os.path.dirname(revelation.__file__), "static"), "revealjs"
-)
+    os.path.join(os.path.dirname(revelation.__file__), "static"), "revealjs")
 
 # DRY form for echoing errors
 error_echo = partial(click.secho, err=True, fg="red", bold=True)
@@ -97,20 +91,19 @@ def mkpresentation(ctx, presentation):
     default="index.html",
     help="File name of the static presentation",
 )
-@click.option(
-    "--force", "-r", is_flag=True, help="Overwrite the output folder if exists"
-)
+@click.option("--force", "-r", is_flag=True,
+              help="Overwrite the output folder if exists")
 @click.pass_context
 def mkstatic(
-    ctx,
-    presentation,
-    config,
-    media,
-    theme,
-    output_folder,
-    output_file,
-    force,
-    style,
+        ctx,
+        presentation,
+        config,
+        media,
+        theme,
+        output_folder,
+        output_file,
+        force,
+        style,
 ):
     """Make static presentation"""
 
@@ -124,8 +117,7 @@ def mkstatic(
     # Check for style override file
     if os.path.isfile(output_folder):
         error_echo(
-            "Error: '{}' already exists and is a file.".format(output_folder)
-        )
+            "Error: '{}' already exists and is a file.".format(output_folder))
         ctx.exit(1)
 
     # Check for presentation file
@@ -144,10 +136,8 @@ def mkstatic(
             shutil.rmtree(output_folder)
         else:
             error_echo(
-                (
-                    "Error: '{}' already exists, use --force to override it."
-                ).format(output_folder)
-            )
+                ("Error: '{}' already exists, use --force to override it."
+                 ).format(output_folder))
             ctx.exit(1)
 
     staticfolder = os.path.join(output_folder, "static")
@@ -157,9 +147,8 @@ def mkstatic(
 
     # if has override style copy
     if style:
-        shutil.copy(
-            style, os.path.join(output_folder, os.path.basename(style))
-        )
+        shutil.copy(style, os.path.join(output_folder,
+                                        os.path.basename(style)))
 
     shutil.copytree(REVEALJS_FOLDER, os.path.join(staticfolder, "revealjs"))
 
@@ -209,14 +198,10 @@ def mkstatic(
 
     with open(output_file, "wb") as f:
         f.write(
-            app.dispatch_request(None).get_data(as_text=True).encode("utf-8")
-        )
+            app.dispatch_request(None).get_data(as_text=True).encode("utf-8"))
 
-    click.echo(
-        "Static presentation generated in {}".format(
-            os.path.realpath(output_folder)
-        )
-    )
+    click.echo("Static presentation generated in {}".format(
+        os.path.realpath(output_folder)))
 
 
 @cli.command("start", help="Start the revelation server")
@@ -301,10 +286,8 @@ def start(ctx, presentation, port, config, media, theme, style, debug):
 
     WebSocketServer(
         ("localhost", port),
-        Resource(
-            [
-                ("^/reloader.*", PresentationReloader),
-                ("^/.*", DebuggedApplication(app)),
-            ]
-        ),
+        Resource([
+            ("^/reloader.*", PresentationReloader),
+            ("^/.*", DebuggedApplication(app)),
+        ]),
     ).serve_forever()

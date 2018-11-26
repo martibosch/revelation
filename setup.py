@@ -29,15 +29,12 @@ with open("README.md", "r") as f:
 with open(os.path.join(PACKAGE, "__init__.py")) as init_file:
     INIT = init_file.read()
 
-VERSION = re.search(
-    "^__version__ = ['\"]([^'\"]+)['\"]", INIT, re.MULTILINE
-).group(1)
-AUTHOR = re.search(
-    "^__author__ = ['\"]([^'\"]+)['\"]", INIT, re.MULTILINE
-).group(1)
-EMAIL = re.search(
-    "^__email__ = ['\"]([^'\"]+)['\"]", INIT, re.MULTILINE
-).group(1)
+VERSION = re.search("^__version__ = ['\"]([^'\"]+)['\"]", INIT,
+                    re.MULTILINE).group(1)
+AUTHOR = re.search("^__author__ = ['\"]([^'\"]+)['\"]", INIT,
+                   re.MULTILINE).group(1)
+EMAIL = re.search("^__email__ = ['\"]([^'\"]+)['\"]", INIT,
+                  re.MULTILINE).group(1)
 
 setup(
     name=PACKAGE,

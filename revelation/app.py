@@ -27,13 +27,13 @@ class Revelation(object):
     """
 
     def __init__(
-        self,
-        presentation,
-        config=None,
-        media=None,
-        theme=None,
-        style=None,
-        reloader=False,
+            self,
+            presentation,
+            config=None,
+            media=None,
+            theme=None,
+            style=None,
+            reloader=False,
     ):
         """
         Initializes the server and creates the environment for the presentation
@@ -99,21 +99,25 @@ class Revelation(object):
         )
 
         context = {
-            "meta": self.config.get("REVEAL_META"),
-            "slides": self.load_slides(
-                self.presentation, self.config.get("REVEAL_SLIDE_SEPARATOR")
-            ),
-            "config": self.config.get("REVEAL_CONFIG"),
-            "theme": self.get_theme(self.config.get("REVEAL_THEME")),
-            "style": self.style,
-            "reloader": self.reloader,
+            "meta":
+            self.config.get("REVEAL_META"),
+            "slides":
+            self.load_slides(self.presentation,
+                             self.config.get("REVEAL_SLIDE_SEPARATOR")),
+            "config":
+            self.config.get("REVEAL_CONFIG"),
+            "theme":
+            self.get_theme(self.config.get("REVEAL_THEME")),
+            "style":
+            self.style,
+            "reloader":
+            self.reloader,
         }
 
         template = env.get_template("presentation.html")
 
         return Response(
-            template.render(**context), headers={"content-type": "text/html"}
-        )
+            template.render(**context), headers={"content-type": "text/html"})
 
     def wsgi_app(self, environ, start_response):
         request = Request(environ)
@@ -137,8 +141,10 @@ class PresentationReloadWebSocketSendEvent(FileSystemEventHandler):
     def on_modified(self, event):
         if event.src_path.endswith((".md", ".css")) and not self.ws.closed:
             self.ws.send(
-                json.dumps({"msg_type": "message", "message": "reload"})
-            )
+                json.dumps({
+                    "msg_type": "message",
+                    "message": "reload"
+                }))
 
 
 class PresentationReloader(WebSocketApplication):

@@ -25,9 +25,8 @@ class CliTestCase(TestCase):
         shutil.rmtree(self.tests_folder)
 
     def test_mkpresentation(self):
-        presentation_folder = os.path.join(
-            self.tests_folder, "test_mkpresentation"
-        )
+        presentation_folder = os.path.join(self.tests_folder,
+                                           "test_mkpresentation")
         presentation_file = os.path.join(presentation_folder, "slides.md")
         media_folder = os.path.join(presentation_folder, "media")
         config_file = os.path.join(presentation_folder, "config.py")
@@ -51,23 +50,20 @@ class CliTestCase(TestCase):
         self.assertEqual(
             result.output,
             "Error: '{}' already exists.\n".format(
-                os.path.abspath(presentation)
-            ),
+                os.path.abspath(presentation)),
         )
 
     def test_mkstatic(self):
         base_folder = tempfile.mkdtemp(dir=self.tests_folder)
-        _, presentation_file = tempfile.mkstemp(
-            ".md", "slides", base_folder, "# Test\n"
-        )
+        _, presentation_file = tempfile.mkstemp(".md", "slides", base_folder,
+                                                "# Test\n")
         output_folder = os.path.join(base_folder, "output")
         index_file = os.path.join(output_folder, "index.html")
         static_folder = os.path.join(output_folder, "static")
 
         runner = CliRunner()
-        result = runner.invoke(
-            cli.mkstatic, [presentation_file, "-o", output_folder]
-        )
+        result = runner.invoke(cli.mkstatic,
+                               [presentation_file, "-o", output_folder])
 
         self.assertEqual(result.exit_code, 0)
         self.assertTrue(os.path.isdir(output_folder))
@@ -76,9 +72,8 @@ class CliTestCase(TestCase):
 
     def test_mkstatic_output_already_exists_file(self):
         base_folder = tempfile.mkdtemp(dir=self.tests_folder)
-        _, presentation_file = tempfile.mkstemp(
-            ".md", "slides", base_folder, "# Test\n"
-        )
+        _, presentation_file = tempfile.mkstemp(".md", "slides", base_folder,
+                                                "# Test\n")
         _, output = tempfile.mkstemp(dir=base_folder)
 
         runner = CliRunner()
@@ -88,15 +83,13 @@ class CliTestCase(TestCase):
         self.assertEqual(
             result.output,
             "Error: '{}' already exists and is a file.\n".format(
-                os.path.abspath(output)
-            ),
+                os.path.abspath(output)),
         )
 
     def test_mkstatic_output_already_exists_folder(self):
         base_folder = tempfile.mkdtemp(dir=self.tests_folder)
-        _, presentation_file = tempfile.mkstemp(
-            ".md", "slides", base_folder, "# Test\n"
-        )
+        _, presentation_file = tempfile.mkstemp(".md", "slides", base_folder,
+                                                "# Test\n")
         output = tempfile.mkdtemp(dir=base_folder)
 
         runner = CliRunner()
@@ -106,8 +99,7 @@ class CliTestCase(TestCase):
         self.assertEqual(
             result.output,
             "Error: '{}' already exists, use --force to override it.\n".format(
-                os.path.abspath(output)
-            ),
+                os.path.abspath(output)),
         )
 
     def test_mkstatic_presentation_not_found(self):
@@ -118,15 +110,13 @@ class CliTestCase(TestCase):
         result = runner.invoke(cli.mkstatic, [presentation])
 
         self.assertEqual(result.exit_code, 1)
-        self.assertEqual(
-            result.output, "Error: Presentation file not found.\n"
-        )
+        self.assertEqual(result.output,
+                         "Error: Presentation file not found.\n")
 
     def test_mkstatic_style_not_file(self):
         base_folder = tempfile.mkdtemp(dir=self.tests_folder)
-        _, presentation_file = tempfile.mkstemp(
-            ".md", "slides", base_folder, "# Test\n"
-        )
+        _, presentation_file = tempfile.mkstemp(".md", "slides", base_folder,
+                                                "# Test\n")
         style = tempfile.mkdtemp(".css", dir=base_folder)
 
         runner = CliRunner()
@@ -140,9 +130,8 @@ class CliTestCase(TestCase):
 
     def test_mkstatic_style_not_css(self):
         base_folder = tempfile.mkdtemp(dir=self.tests_folder)
-        _, presentation_file = tempfile.mkstemp(
-            ".md", "slides", base_folder, "# Test\n"
-        )
+        _, presentation_file = tempfile.mkstemp(".md", "slides", base_folder,
+                                                "# Test\n")
         _, style = tempfile.mkstemp(".wrong", dir=base_folder)
 
         runner = CliRunner()
@@ -157,9 +146,8 @@ class CliTestCase(TestCase):
     @patch("revelation.cli.WebSocketServer")
     def test_start(self, websocketserver_patch):
         base_folder = tempfile.mkdtemp(dir=self.tests_folder)
-        _, presentation_file = tempfile.mkstemp(
-            ".md", "slides", base_folder, "# Test\n"
-        )
+        _, presentation_file = tempfile.mkstemp(".md", "slides", base_folder,
+                                                "# Test\n")
 
         runner = CliRunner()
         runner.invoke(cli.start, [presentation_file])
@@ -174,15 +162,13 @@ class CliTestCase(TestCase):
         result = runner.invoke(cli.start, [presentation])
 
         self.assertEqual(result.exit_code, 1)
-        self.assertEqual(
-            result.output, "Error: Presentation file not found.\n"
-        )
+        self.assertEqual(result.output,
+                         "Error: Presentation file not found.\n")
 
     def test_start_style_not_file(self):
         base_folder = tempfile.mkdtemp(dir=self.tests_folder)
-        _, presentation_file = tempfile.mkstemp(
-            ".md", "slides", base_folder, "# Test\n"
-        )
+        _, presentation_file = tempfile.mkstemp(".md", "slides", base_folder,
+                                                "# Test\n")
         style = tempfile.mkdtemp(".css", dir=base_folder)
 
         runner = CliRunner()
@@ -196,9 +182,8 @@ class CliTestCase(TestCase):
 
     def test_start_style_not_css(self):
         base_folder = tempfile.mkdtemp(dir=self.tests_folder)
-        _, presentation_file = tempfile.mkstemp(
-            ".md", "slides", base_folder, "# Test\n"
-        )
+        _, presentation_file = tempfile.mkstemp(".md", "slides", base_folder,
+                                                "# Test\n")
         _, style = tempfile.mkstemp(".wrong", dir=base_folder)
 
         runner = CliRunner()

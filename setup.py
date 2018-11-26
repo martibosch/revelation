@@ -2,74 +2,69 @@
 # -*- coding: utf-8 -*-
 """revelation setup file"""
 
-import os
-import re
+from io import open  # compatible enconding parameter
+from os import path
 
 from setuptools import find_packages, setup
 
-PACKAGE = "revelation"
-REQUIREMENTS = [
-    "Jinja2==2.10",
-    "Werkzeug==0.14.1",
-    "click==6.7",
-    "gevent-websocket==0.10.1",
-    "gevent==1.3.6",
-    "watchdog==0.8.3",
+__version__ = '0.5.2'
+
+classifiers = [
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.4",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Topic :: Multimedia :: Graphics :: Presentation",
+    "Topic :: Text Processing :: Markup :: HTML",
 ]
-TEST_REQUIREMENTS = [
-    "coverage==4.5.1",
-    "coveralls==1.4.0",
-    "flake8==3.5.0",
-    "mock==2.0.0",
+
+here = path.abspath(path.dirname(__file__))
+
+# Get the long description from the README file
+with open(path.join(here, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
+
+# get the dependencies and installs
+with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
+    all_reqs = f.read().split('\n')
+
+# get the dependencies for testing and dev mode
+with open(path.join(here, 'requirements-dev.txt'), encoding='utf-8') as f:
+    test_reqs = f.read().split('\n')
+
+install_requires = [x.strip() for x in all_reqs if 'git+' not in x]
+dependency_links = [
+    x.strip().replace('git+', '') for x in all_reqs if x.startswith('git+')
 ]
-
-with open("README.md", "r") as f:
-    README = f.read()
-
-with open(os.path.join(PACKAGE, "__init__.py")) as init_file:
-    INIT = init_file.read()
-
-VERSION = re.search("^__version__ = ['\"]([^'\"]+)['\"]", INIT,
-                    re.MULTILINE).group(1)
-AUTHOR = re.search("^__author__ = ['\"]([^'\"]+)['\"]", INIT,
-                   re.MULTILINE).group(1)
-EMAIL = re.search("^__email__ = ['\"]([^'\"]+)['\"]", INIT,
-                  re.MULTILINE).group(1)
 
 setup(
-    name=PACKAGE,
-    version=VERSION,
+    name='revelation',
+    version=__version__,
     description="Make awesome reveal.js presentations with revelation",
-    long_description=README,
+    long_description=long_description,
     long_description_content_type="text/markdown",
-    author=AUTHOR,
-    author_email=EMAIL,
+    author='Martí Bosch',
+    author_email='marti.bosch@epfl.ch',
     url="https://github.com/humrochagf/revelation",
     license="GPL-3.0",
     packages=find_packages(),
-    package_data={PACKAGE: ["templates/presentation.html"]},
+    package_data={'revelation': ["templates/presentation.html"]},
     zip_safe=False,
-    install_requires=REQUIREMENTS,
+    install_requires=install_requires,
+    dependency_links=dependency_links,
     entry_points=dict(console_scripts=["revelation=revelation.cli:cli"]),
     platforms="any",
     keywords="presentation slides reveal.js markdown",
-    classifiers=[
-        "Environment :: Console",
-        "Environment :: Web Environment",
-        "Intended Audience :: Developers",
-        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-        "Natural Language :: English",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Topic :: Multimedia :: Graphics :: Presentation",
-        "Topic :: Text Processing :: Markup :: HTML",
-    ],
+    classifiers=classifiers,
     test_suite="tests",
-    tests_require=TEST_REQUIREMENTS,
-    extras_require={"test": TEST_REQUIREMENTS},
+    tests_require=test_reqs,
+    extras_require={"test": test_reqs},
 )
